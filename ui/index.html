@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Jungle · 정글 동선</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="renderer.js" defer></script>
+</head>
+<body>
+  <div class="companion app-shell">
+    <header class="toolbar titlebar" title="빈 공간을 드래그해 이동할 수 있습니다.">
+      <div class="wordmark">JUNGLE<span id="connection-dot" class="connection-dot" role="img" aria-label="연결 대기"></span></div>
+      <time id="game-time" class="game-time">--:--</time>
+      <div class="window-actions">
+        <button id="lock-button" class="icon-button" type="button" title="클릭 통과 · Ctrl/Cmd + Shift + L" aria-label="클릭 통과 켜기" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4.5" y="8.5" width="11" height="8" rx="2"></rect><path class="lock-closed" d="M6.5 8.5V5.8a3.5 3.5 0 0 1 7 0v2.7"></path><path class="lock-open" d="M6.5 8.5V5.8a3.5 3.5 0 0 1 6.8-1.2"></path><path d="M10 12v1.5"></path></svg></button>
+        <button id="settings-toggle" class="icon-button" type="button" title="설정" aria-label="설정 열기" aria-expanded="false" aria-controls="settings-panel"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m8 3 .5-1h3l.5 1 .8 1.4 1.6.1 1.1-.1 1.5 2.6-.6 1-.8 1.3.8 1.4.6.9-1.5 2.6-1.1-.1-1.6.1-.8 1.4-.5 1h-3l-.5-1-.8-1.4-1.6-.1-1.1.1L3 12.6l.6-.9.8-1.4-.8-1.3L3 8l1.5-2.6 1.1.1 1.6-.1Z"></path><circle cx="10" cy="9.7" r="2.5"></circle></svg></button>
+        <button id="close-button" class="icon-button close-button" type="button" title="닫기" aria-label="닫기"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 5.5 9 9m0-9-9 9"></path></svg></button>
+      </div>
+    </header>
+    <main>
+      <section class="next-section" aria-labelledby="next-camp">
+        <div class="eyebrow" id="next-caption">다음 캠프</div>
+        <div class="next-heading"><h1 id="next-camp">연결을 기다리는 중</h1><span id="next-uncertain" class="estimate" title="미확인 캠프 또는 타이머로 추정한 상태입니다." hidden>추정</span></div>
+        <p id="waiting-message" class="waiting-message">게임이 시작되면 동선을 표시합니다.</p>
+        <div id="next-timing" class="next-timing" hidden><div><span>도착</span><strong id="next-arrival">--:--</strong></div><div><span>대기</span><strong id="next-wait">—초</strong></div><div><span>완료</span><strong id="next-finish">--:--</strong></div></div>
+        <button id="next-complete" class="complete-button" type="button" title="직접 확인한 처치를 기록하고 다음 동선으로 이동합니다." disabled><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 10 3.5 3.5L15 7"></path></svg><span>처치 완료</span></button>
+      </section>
+      <section id="route-section" class="route-section" aria-labelledby="route-title" hidden><div class="section-heading"><h2 id="route-title">현재 동선</h2><span id="route-total" title="이동·대기·사냥을 합한 예상 시간입니다.">약 —초</span></div><ol id="route-steps" class="route-steps"></ol></section>
+      <section id="settings-panel" class="settings-panel" aria-labelledby="settings-title" hidden>
+        <h2 id="settings-title">설정</h2>
+        <div class="mode-picker" role="group" aria-label="데이터 모드"><button id="live-mode" type="button" aria-pressed="true">실제 연결</button><button id="demo-mode" type="button" aria-pressed="false" title="예제 데이터로 동선을 체험합니다.">체험 모드</button></div>
+        <div class="setting-grid"><label>출발 캠프<select id="start-camp"><option value="blue">블루</option><option value="gromp">두꺼비</option><option value="wolves">늑대</option><option value="raptors">칼날부리</option><option value="red">레드</option><option value="krugs">돌거북</option></select></label><label>방문 캠프<select id="route-length"><option value="1">1곳</option><option value="2">2곳</option><option value="3">3곳</option><option value="4">4곳</option><option value="5">5곳</option><option value="6">6곳</option></select></label><label class="team-setting">아군 진영<select id="team"><option value="auto">자동 확인</option><option value="ORDER">블루 진영</option><option value="CHAOS">레드 진영</option></select></label></div>
+        <label class="check-setting" title="실제 존재 여부를 확인하지 않은 캠프도 경로 후보에 포함합니다."><input id="include-unknown" type="checkbox"><span>미확인 캠프 포함</span></label>
+        <button id="overlay-toggle" class="quiet-button" type="button">오버레이 보기<span aria-hidden="true">↗</span></button>
+        <p id="shortcut-hint" class="shortcut-hint">Ctrl/Cmd + Shift + O 보기 · L 클릭 통과</p>
+      </section>
+    </main>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  </div>
+</body>
+</html>
